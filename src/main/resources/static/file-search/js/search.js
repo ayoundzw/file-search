@@ -28,7 +28,7 @@ function updatePagination(page, count) {
 	}
 
 	// 添加当前页前后5页
-	for (let i = Math.max(1, page - 5); i <= Math.min(totalPages, page + 5); i++) {
+	for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i++) {
 		if (i === page) {
 			html += `<li class="page-item active"><a class="page-link" href="#">${i}</a></li>`;
 		} else {
