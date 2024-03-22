@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文件查询界面</title>
+<link href="./bootstrap-5.3.0-alpha1/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="./bootstrap-icons-1.11.3/font/bootstrap-icons.css">
+<script src="./jquery/jquery-3.6.1.min.js"></script>
+<script src="./bootstrap-5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row mt-2">
+			<div class="col-md-6">
+				<input type="text" class="form-control" id="query"
+					placeholder="请输入查询条件">
+			</div>
+			<div class="col-md-2">
+				<select class="form-select" id="queryType">
+					<option value="f">文件名精确匹配</option>
+					<option value="f1">文件名智能匹配</option>
+					<option value="c">文件内容精确匹配</option>
+					<option value="c1">文件内容智能匹配</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<select class="form-select" value="3" id="queryOrder">
+					<option value="1">由大到小</option>
+					<option value="2">由小到大</option>
+					<option value="3">时间倒序</option>
+					<option value="4">时间正序</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<button id="queryBtn" type="submit" class="btn btn-primary">查询</button>
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-12">
+				<div id="resultList" class="row mt-2 gy-2"></div>
+				<div class="row mt-4">
+					<div class="col-md-6">
+						<nav aria-label="Page navigation">
+							<ul id="pagination" class="pagination justify-content-end">
+								<li class="page-item disabled" id="prevPage"><a
+									class="page-link" href="#" tabindex="-1">上一页</a></li>
+								<li class="page-item active" id="currentPage"><a
+									class="page-link" href="#">1</a></li>
+								<li class="page-item disabled" id="nextPage"><a
+									class="page-link" href="#">下一页</a></li>
+							</ul>
+
+						</nav>
+					</div>
+					<div class="col-md-6">
+						<ul id="pagination" class="pagination justify-content">
+							<li class="page-item"><p class="page-link">每页</p></li>
+							<li class="page-item"><select class="form-select" value="3"
+								id="pageSize">
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+							</select></li>
+							<li class="page-item"><label class="page-link">条</label></li>
+							<li class="page-item"><label id="totalCount"
+								class="page-link">共0条</label></li>
+						</ul>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2 gy-2">
+				<div>
+					<button id="statusBtn" type="button"
+						class="btn btn-light" disabled>
+						<span class="bi bi-stop-fill"></span>
+					</button>
+					<button id="operatorBtn" type="button"
+						class="btn btn-outline-primary">
+						<span class="bi bi-stop-fill"></span>
+					</button>
+				</div>
+			</div>
+			<div id="statusMessage" class="col-md-10"></div>
+		</div>
+	</div>
+	<div class="modal" id="filePreview">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h6 class="modal-title" id="fileTitle"></h6>
+					&nbsp; <a id="modelDownloadA" class='bi bi-cloud-download-fill'
+						href='' target='_blank'></a>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+
+				<!-- 模态框内容 -->
+				<div class="modal-body" style="min-height: 500px;">
+					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="pills-home-tab"
+								data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
+								role="tab" aria-controls="pills-home" aria-selected="true">文本</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="pills-profile-tab"
+								data-bs-toggle="pill" data-bs-target="#pills-profile"
+								type="button" role="tab" aria-controls="pills-profile"
+								aria-selected="false">预览</button>
+						</li>
+					</ul>
+					<div class="tab-content" id="pills-tabContent">
+						<div class="tab-pane fade show active" id="pills-home"
+							role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+							<textarea readonly id="fileContent"
+								style="width: 100%; height: 100%; min-height: 450px"></textarea>
+						</div>
+						<div class="tab-pane fade" id="pills-profile" role="tabpanel"
+							aria-labelledby="pills-profile-tab" tabindex="0"></div>
+					</div>
+				</div>
+
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger"
+						data-bs-dismiss="modal">关闭</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="toast-container position-fixed bottom-0 end-0 p-3">
+		<div id="startTaskToast" class="toast" autohide="true" delay="500" role="alert" aria-live="assertive"
+			aria-atomic="true">
+			<div class="toast-header">
+				<img src="images/doing.gif" class="rounded me-2" alt="..."> <strong
+					class="me-auto">任务开始</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="toast"
+					aria-label="Close"></button>
+			</div>
+			<div class="toast-body">扫描任务已开始，请耐心等待！
+			</div>
+		</div>
+	</div>
+	<div class="toast-container position-fixed bottom-0 end-0 p-3">
+		<div id="endTaskToast" class="toast" autohide="true" delay="500" role="alert" aria-live="assertive"
+			aria-atomic="true">
+			<div class="toast-header">
+				<span class="bi bi-stop-fill"></span> <strong
+					class="me-auto">任务结束</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="toast"
+					aria-label="Close"></button>
+			</div>
+			<div class="toast-body">扫描任务已结束。
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/search.js"></script>
+</html>

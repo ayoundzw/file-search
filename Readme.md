@@ -1,0 +1,1 @@
+docker build --tag ayound/file-search:1.0.5 .
