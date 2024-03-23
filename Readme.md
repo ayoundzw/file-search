@@ -12,6 +12,10 @@
 
 可以使用maven编译，基于springboot，单jar运行。
 
+完全开源，基于apache协议，可自行修改，开源地址：[GitHub - ayoundzw/file-search: 文件全文检索工具](https://github.com/ayoundzw/file-search)
+
+因为是只花了几天时间手搓了一个程序，请不要吐槽代码质量问题，如有问题，请自行fork修改
+
 在nas中只能使用docker。
 
 # 编译打包
@@ -27,6 +31,8 @@
 ## 第三步(可选)
 
     docker打包
+
+    docker build --tag ayound/file-search:1.0.6 .
 
     我已经打好docker镜像了，可以使用ayound/file-search:1.0.6直接拉取
 

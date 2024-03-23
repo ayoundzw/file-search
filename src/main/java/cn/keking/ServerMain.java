@@ -1,6 +1,7 @@
 package cn.keking;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ayound.nas.file.search.StartScanThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,6 +32,8 @@ public class ServerMain {
         String contextPath = servlet.getContextPath();
         String urlSuffix = StringUtils.isBlank(contextPath)? String.valueOf(port):port+contextPath;
         logger.info("kkFileView 服务启动完成，耗时:{}s，演示页请访问: http://127.0.0.1:{} ", stopWatch.getTotalTimeSeconds(), urlSuffix);
+        StartScanThread thread = new StartScanThread();
+		thread.start();
     }
 
 }
