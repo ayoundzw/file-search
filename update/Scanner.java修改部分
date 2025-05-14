@@ -1,0 +1,32 @@
+Scanner文件：https://github.com/zdbit/file-search/blob/main/src/main/java/org/ayound/nas/file/search/Scanner.java
+
+开始编辑：
+
+else if (entry.isDirectory() && !entry.getName().startsWith("@")) {
+    fileCount += this.scanDirectory(entry, observedContentTypes, runnable);
+}
+
+之前是：
+
+else if (entry.isDirectory()) {
+    fileCount += this.scanDirectory(entry, observedContentTypes, runnable);
+}
+
+作用是忽略@开头的文件夹，这类一般是系统文件，没有作用而且耗时非常久
+
+
+
+另外跳过全文检索，只检索文件名：getBody中修改一下
+
+	if(1==1){    //if(1==1){的目的是为了通过编译器，不然没有办法编译
+    	Path path = Path.of("/fsearch/files/walkerman.test"); // 将路径字符串转换为 Path 对象
+    	inputStream = Files.newInputStream(path); // 通过路径创建 InputStream
+    }
+
+....中间忽略部分，下边的作用是赋值给正文wakerman，不能让正文为空。
+	bodyContent="walkerman";
+	var7 = bodyContent;
+
+还有
+            //log.info("File is no change [" + file.getAbsolutePath() + "]");//不记录了，会产生大量日志
+            log.info("indexing");
